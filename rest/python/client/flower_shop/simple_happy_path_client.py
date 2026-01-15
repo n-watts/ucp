@@ -348,6 +348,13 @@ Note:
       return
 
     logger.info("Successfully created checkout session: %s", checkout_id)
+    # Iterate through the items returned by server to confirm the cart contents
+    if "line_items" in checkout_data:
+      for li in checkout_data["line_items"]:
+        # Reaching into the 'item' dictionary to find the 'title'
+        title = li.get("item", {}).get("title", "Unknown Item")
+        qty = li.get("quantity", 0)
+        logger.info(f"  -> Cart contains: {title} (Qty: {qty})")
 
     logger.info(
       "Current Total: %s cents", checkout_data["totals"][-1]["amount"]
